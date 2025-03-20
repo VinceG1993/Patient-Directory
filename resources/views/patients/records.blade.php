@@ -13,39 +13,28 @@
                 <th>ID</th>
                 <th>Date</th>
                 <th>Notes</th>
-                @if (!$records)
-                    <th>Record Data</th>
-                @else
-                    @foreach ($uniqueFields as $fieldName)
-                        <th>{{ $fieldName }}</th>
-                    @endforeach
-                @endif
+                @foreach ($uniqueFields as $fieldName)
+                    <th>{{ $fieldName }}</th>
+                @endforeach
             </tr>
         </thead>
         <tbody>
-            @php
-                $i=0;
-            @endphp
-            @foreach ($records as $record)
+            @foreach ($records as $index => $record)
                 <tr>
                     <td>{{ $record->id }}</td>
                     <td>{{ $record->record_date }}</td>
                     <td>{{ $record->notes }}</td>
-                    @for ($j=0; $j < count($allData[$i]); $j++)
-                        @if ($j % 2 != 0)
-                            <td>{{ $allData[$i][$j] }}</td>
-                        @endif
-                    @endfor
+    
+                    @foreach ($uniqueFields as $fieldName)
+                        <td>{{ $allData[$index][$fieldName] ?? '-' }}</td> 
+                    @endforeach
                 </tr>
-                @php
-                    $i++;
-                @endphp
             @endforeach
         </tbody>
     </table>
 </div>
 
-<!-- Add Record Modal (Moved Outside the Loop) -->
+<!-- Add Record Modal -->
 <div class="modal fade" id="addRecordModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -90,7 +79,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        <button class="btn btn-sm btn-primary" onclick="addField(document.getElementById('selectField').value)">Add Field</button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="addField()">Add Field</button>
                     </div>
                     <button type="submit" class="btn btn-success">Add Record</button>
                 </form>
@@ -102,12 +91,26 @@
 
 @section('scripts')
 <script>
-    let fieldCount = 0;
-    let fields = @json($fields);
 
-    function addField(fieldID){
-        let container = document.getElementById("fieldsContainer");
+    let fields = @json($fields);
+    let addedFields = new Set(); // Track added field IDs
+
+    function addField() {
+        let select = document.getElementById("selectField");
+        let fieldID = select.value;
+
+        if (!fieldID) return; // Do nothing if no field is selected
+        if (addedFields.has(fieldID)) {
+            alert("This field has already been added.");
+            return;
+        }
+
         let field = fields.find(i => i.id === Number(fieldID));
+        let container = document.getElementById("fieldsContainer");
+
+        let fieldWrapper = document.createElement("div");
+        fieldWrapper.className = "mb-3 field-wrapper";
+        fieldWrapper.setAttribute("data-id", fieldID);
 
         let label = document.createElement("label");
         label.innerText = field.field_name;
@@ -123,14 +126,37 @@
         input.className = "form-control mt-2";
         input.placeholder = field.default_value;
 
-        document.getElementById("recordAdd").appendChild(input);
+        let removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn btn-danger btn-sm mt-2";
+        removeBtn.innerText = "Remove";
+        removeBtn.onclick = function () {
+            removeField(fieldID);
+        };
 
-        // Append elements
-        container.appendChild(label);
-        container.appendChild(hidden);
-        container.appendChild(input);
-
-        fieldCount++; // Increment ID count
+        fieldWrapper.appendChild(label);
+        fieldWrapper.appendChild(hidden);
+        fieldWrapper.appendChild(input);
+        fieldWrapper.appendChild(removeBtn);
+        
+        container.appendChild(fieldWrapper);
+        addedFields.add(fieldID);
     }
+
+    function removeField(fieldID) {
+        let container = document.getElementById("fieldsContainer");
+        let fieldWrapper = document.querySelector(`.field-wrapper[data-id='${fieldID}']`);
+        if (fieldWrapper) {
+            container.removeChild(fieldWrapper);
+            addedFields.delete(fieldID); // Remove from set
+        }
+    }
+
+    // Reset modal on close
+    document.getElementById("addRecordModal").addEventListener("hidden.bs.modal", function () {
+        document.getElementById("fieldsContainer").innerHTML = ""; // Clear added fields
+        addedFields.clear(); // Clear tracking set
+    });
+
 </script>
 @endsection

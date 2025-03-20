@@ -87,37 +87,26 @@ class PatientController extends Controller
     public function showRecords($id)
     {
         $patient = Patient::findOrFail($id);
-        $records = $patient->medicalRecords; // Assuming you have a relationship
+        $records = $patient->medicalRecords;
         $fields = MedicalRecordField::all();
-
-        $fieldName = MedicalRecordField::pluck('field_name')->toArray();
 
         $allNames = collect();
         $allData = [];
-        $i = 0;
 
         foreach ($records as $record) {
             $decodedData = json_decode($record->record_data, true);
-            
+
             if (is_array($decodedData)) {
                 $row = [];
-                $fieldNames = array_values($decodedData);
+                for ($i = 0; $i < count($decodedData); $i += 2) {
+                    $fieldName = $decodedData[$i]; // Even index = Field Name
+                    $fieldValue = $decodedData[$i + 1] ?? ''; // Odd index = Value
 
-                foreach ($fieldNames as $field) {
-                    if (in_array($field, $fieldName)) {
-                        $allNames->push($field);
-                    }
+                    $row[$fieldName] = $fieldValue; 
+                    $allNames->push($fieldName);
                 }
-
-                foreach ($decodedData as $key => $value) {
-                    $row[$key] = $value;
-                }
-
-                if (!empty($row)){
-                    $allData[$i] = $row;
-                }
+                $allData[] = $row;
             }
-            $i++;
         }
 
         $uniqueFields = $allNames->unique();
