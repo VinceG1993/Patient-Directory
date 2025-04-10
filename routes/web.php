@@ -7,6 +7,7 @@ use App\Http\Controllers\DoctorAvailabilityController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicalRecordController;
+use App\Http\Controllers\AuthController;
 
 
 Route::get('/', function () {
@@ -18,7 +19,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //Patients
 Route::resource('patients', PatientController::class);
-Route::get('/patients/{id}/records', [PatientController::class, 'showRecords'])->name('patients.records');
 
 //Doctors
 Route::resource('doctors', DoctorController::class);
@@ -37,3 +37,11 @@ Route::post('/appointments/store', [AppointmentController::class, 'store'])->nam
 //Records
 Route::resource('records', MedicalRecordController::class);
 Route::post('/patients/{id}/records/store', [MedicalRecordController::class, 'store'])->name('records.store');
+Route::get('/patients/{id}/records', [MedicalRecordController::class, 'show'])->name('records.show');
+
+//Authentication
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

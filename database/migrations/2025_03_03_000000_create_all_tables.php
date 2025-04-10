@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up()
     {
         // Doctors Table
-        Schema::create('doctors', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name', 42);
             $table->string('email', 42)->unique();

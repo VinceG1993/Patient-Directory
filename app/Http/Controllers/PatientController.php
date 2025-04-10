@@ -84,34 +84,5 @@ class PatientController extends Controller
         return redirect()->route('patients.index')->with('success', 'Patient deleted successfully!');
     }
 
-    public function showRecords($id)
-    {
-        $patient = Patient::findOrFail($id);
-        $records = $patient->medicalRecords;
-        $fields = MedicalRecordField::all();
-
-        $allNames = collect();
-        $allData = [];
-
-        foreach ($records as $record) {
-            $decodedData = json_decode($record->record_data, true);
-
-            if (is_array($decodedData)) {
-                $row = [];
-                for ($i = 0; $i < count($decodedData); $i += 2) {
-                    $fieldName = $decodedData[$i]; // Even index = Field Name
-                    $fieldValue = $decodedData[$i + 1] ?? ''; // Odd index = Value
-
-                    $row[$fieldName] = $fieldValue; 
-                    $allNames->push($fieldName);
-                }
-                $allData[] = $row;
-            }
-        }
-
-        $uniqueFields = $allNames->unique();
-
-        return view('patients.records', compact('patient', 'records', 'fields', 'allData', 'uniqueFields'));
-    }
 
 }

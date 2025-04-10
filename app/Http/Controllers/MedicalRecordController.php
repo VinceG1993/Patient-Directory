@@ -13,17 +13,30 @@ class MedicalRecordController extends Controller
     {
         $patient = Patient::findOrFail($id);
         $records = $patient->medicalRecords;
+        $fields = MedicalRecordField::all();
 
-        $allFields = collect();
+        $allNames = collect();
+        $allData = [];
 
         foreach ($records as $record) {
             $decodedData = json_decode($record->record_data, true);
-            $allFields = $allFields->merge(array_keys($decodedData));
+
+            if (is_array($decodedData)) {
+                $row = [];
+                for ($i = 0; $i < count($decodedData); $i += 2) {
+                    $fieldName = $decodedData[$i]; // Even index = Field Name
+                    $fieldValue = $decodedData[$i + 1] ?? ''; // Odd index = Value
+
+                    $row[$fieldName] = $fieldValue; 
+                    $allNames->push($fieldName);
+                }
+                $allData[] = $row;
+            }
         }
 
-        $uniqueFields = $allFields->unique(); // Remove duplicates
+        $uniqueFields = $allNames->unique();
 
-        return view('patients.records', compact('patient', 'records'));
+        return view('patients.records', compact('patient', 'records', 'fields', 'allData', 'uniqueFields'));
     }
 
     public function store(Request $request,$id)

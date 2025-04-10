@@ -21,11 +21,38 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('appointments.index') }}">Appointments</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('doctors.index') }}">Doctors</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('patients.index') }}">Patients</a></li>
+                <!-- Login at the top in mobile view -->
+                <ul class="navbar-nav d-lg-none mb-2 w-100">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light w-100 d-flex align-items-center justify-content-center gap-2" href="{{ route('login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Main nav links -->
+                <ul class="navbar-nav mx-lg-auto text-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('appointments.index') }}">Appointments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('doctors.index') }}">Doctors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('patients.index') }}">Patients</a>
+                    </li>
+                </ul>
+
+                <!-- Login aligned right on desktop -->
+                <ul class="navbar-nav d-none d-lg-flex">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light d-flex align-items-center gap-2" href="{{ route('login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

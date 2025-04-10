@@ -30,7 +30,7 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
-                        <a href="{{ route('patients.records', $patient->id) }}" class="btn btn-sm btn-primary">View Records</a>
+                        <a href="{{ route('records.show', $patient->id) }}" class="btn btn-sm btn-primary">View Records</a>
                     </td>
                 </tr>
 
