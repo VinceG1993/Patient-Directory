@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\doctor;
+use App\Models\User;
 
-class doctorController extends Controller
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the doctors.
      */
     public function index()
     {
-        $doctors = doctor::latest()->paginate(10);
-        return view('doctors.index', compact('doctors'));
+        $users = User::latest()->paginate(10);
+        return view('doctors.index', compact('users'));
     }
 
     /**
@@ -31,14 +31,14 @@ class doctorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:42',
-            'email' => 'required|email|max:42|unique:doctors,email',
+            'email' => 'required|email|max:42|unique:users,email',
             'phone_number' => 'required|string|max:15',
             'clinic_address' => 'required|string|max:255',
             'deposit_required' => 'required|boolean',
             'password' => 'required|string|min:6',
         ]);
     
-        Doctor::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
@@ -49,30 +49,29 @@ class doctorController extends Controller
     
         return redirect()->back()->with('success', 'New doctor added successfully!');
     }
-    
 
     /**
      * Show the form for editing the specified doctor.
      */
-    public function edit(doctor $doctor)
+    public function edit(User $user)
     {
-        return view('doctors.edit', compact('doctor'));
+        return view('doctors.edit', compact('user'));
     }
 
     /**
      * Update the specified doctor in storage.
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required|string|max:42',
-            'email' => 'required|email|max:42|unique:doctors,email,' . $doctor->id,
+            'email' => 'required|email|max:42|unique:users,email,' . $user->id,
             'phone_number' => 'required|string|max:15',
             'clinic_address' => 'required|string|max:255',
             'deposit_required' => 'required|boolean',
         ]);
     
-        $doctor->update($request->all());
+        $user->update($request->all());
     
         return redirect()->back()->with('success', 'Doctor updated successfully!');
     }
@@ -80,18 +79,17 @@ class doctorController extends Controller
     /**
      * Remove the specified doctor from storage.
      */
-    public function destroy(doctor $doctor)
+    public function destroy(User $user)
     {
-        $doctor->delete();
-        return redirect()->route('doctors.index')->with('success', 'doctor deleted successfully!');
+        $user->delete();
+        return redirect()->route('doctors.index')->with('success', 'Doctor deleted successfully!');
     }
 
     public function showAppointments($id)
     {
-        $doctor = doctor::findOrFail($id);
-        $records = $doctor->appointments; // Assuming you have a relationship
+        $user = User::findOrFail($id);
+        $records = $user->appointments;
 
-        return view('doctors.appointments', compact('doctor', 'records'));
+        return view('doctors.appointments', compact('user', 'records'));
     }
-
 }

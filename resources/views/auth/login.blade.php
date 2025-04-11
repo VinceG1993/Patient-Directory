@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
@@ -17,12 +17,24 @@
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input id="email" type="email" class="form-control" name="email" required autofocus>
+                @error('email')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input id="password" type="password" class="form-control" name="password" required>
+                <div class="input-group">
+                    <input id="password" type="password" class="form-control" name="password" required>
+                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                        <i id="eyeIcon" class="bi bi-eye-slash"></i> 
+                    </button>
+                </div>
+                @error('password')
+                    <div class="text-danger small">{{ $message }}</div>
+                @enderror
             </div>
+            
 
             <div class="mb-3 form-check">
                 <input type="checkbox" name="remember" class="form-check-input" id="remember">

@@ -11,10 +11,10 @@ class DoctorAvailability extends Model
 
     protected $table = 'doctor_availability';
     
-    protected $fillable = ['doctor_id', 'day_of_week', 'start_time', 'end_time'];
+    protected $fillable = ['user_id', 'day_of_week', 'start_time', 'end_time'];
 
-    public function doctor()
+    public function user()
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->belongsTo(User::class);
     }
 }

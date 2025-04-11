@@ -13,7 +13,12 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::latest()->paginate(10);
+        // Get the ID of the logged-in doctor (user)
+        $doctorId = auth()->user()->id;
+
+        // Fetch only the patients assigned to this doctor
+        $patients = Patient::where('doctor_id', $doctorId)->latest()->paginate(10);
+
         return view('patients.index', compact('patients'));
     }
 
@@ -35,19 +40,19 @@ class PatientController extends Controller
             'email' => 'required|email|max:42|unique:patients,email',
             'phone_number' => 'required|string|max:15',
             'home_address' => 'required|string|max:255',
-            'password' => 'required|string|min:6',
         ]);
-    
+
         Patient::create([
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'home_address' => $request->home_address,
-            'password' => bcrypt($request->password),
+            'doctor_id' => auth()->id(), 
         ]);
-    
+
         return redirect()->back()->with('success', 'New patient added successfully!');
     }
+
     
 
     /**
@@ -83,6 +88,4 @@ class PatientController extends Controller
         $patient->delete();
         return redirect()->route('patients.index')->with('success', 'Patient deleted successfully!');
     }
-
-
 }

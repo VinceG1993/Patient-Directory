@@ -79,7 +79,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="addField()">Add Field</button>
+                        <button type="button" class="btn btn-sm btn-primary mt-2" onclick="addField()">Add Field</button>
                     </div>
                     <button type="submit" class="btn btn-success">Add Record</button>
                 </form>

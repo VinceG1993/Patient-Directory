@@ -56,5 +56,4 @@ class MedicalRecordController extends Controller
 
         return redirect()->back()->with('success', 'Record added successfully!');
     }
-    
 }

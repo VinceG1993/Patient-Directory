@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        // Doctors Table
+        // Users Table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name', 42);
@@ -15,14 +15,13 @@ return new class extends Migration {
             $table->string('password', 60);
             $table->string('clinic_address', 255);
             $table->string('phone_number', 15);
-            $table->boolean('deposit_required');
             $table->timestamps();
         });
 
         // Doctor Availability Table
         Schema::create('doctor_availability', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
             $table->enum('day_of_week', ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
             $table->time('start_time');
             $table->time('end_time');
@@ -35,7 +34,7 @@ return new class extends Migration {
             $table->string('email', 42);
             $table->string('phone_number', 15);
             $table->string('home_address', 255);
-            $table->string('password', 60);
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -61,7 +60,7 @@ return new class extends Migration {
         // Appointments Table
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->date('appointment_date');
             $table->time('appointment_time');
@@ -78,6 +77,6 @@ return new class extends Migration {
         Schema::dropIfExists('medical_records');
         Schema::dropIfExists('patients');
         Schema::dropIfExists('doctor_availability');
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('users');
     }
 };

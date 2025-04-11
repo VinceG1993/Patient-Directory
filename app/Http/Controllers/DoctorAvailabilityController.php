@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DoctorAvailability;
-use App\Models\Doctor;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use App\Models\Appointment;
 use Carbon\Carbon;
@@ -25,7 +25,7 @@ class DoctorAvailabilityController extends Controller
      */
     public function create()
     {
-        $doctors = Doctor::all(); // Fetch all doctors
+        $doctors = User::all();
         return view('doctor_availability.create', compact('doctors'));
     }
 
@@ -35,7 +35,7 @@ class DoctorAvailabilityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'doctor_id' => 'required|exists:doctors,id',
+            'doctor_id' => 'required|exists:users,id',
             'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -52,7 +52,7 @@ class DoctorAvailabilityController extends Controller
     public function edit($id)
     {
         $availability = DoctorAvailability::findOrFail($id);
-        $doctors = Doctor::all();
+        $doctors = User::all();
         return view('doctor_availability.edit', compact('availability', 'doctors'));
     }
 
@@ -62,7 +62,7 @@ class DoctorAvailabilityController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'doctor_id' => 'required|exists:doctors,id',
+            'doctor_id' => 'required|exists:users,id',
             'day_of_week' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
@@ -92,11 +92,9 @@ class DoctorAvailabilityController extends Controller
             'appointment_date' => $request->appointment_date,
             'appointment_time' => $request->appointment_time,
         ]);
-        // Get the day of the week from the selected appointment date
-        $dayOfWeek = date('l', strtotime($request->appointment_date)); // Returns 'Monday', 'Tuesday', etc.
+        $dayOfWeek = date('l', strtotime($request->appointment_date));
 
-        // Check if the doctor is available on this day and time
-        $exists = DoctorAvailability::where('doctor_id', $request->doctor_id)
+        $exists = DoctorAvailability::where('user_id', $request->doctor_id)
             ->where('day_of_week', $dayOfWeek)
             ->whereTime('start_time', '<=', $request->appointment_time)
             ->whereTime('end_time', '>=', $request->appointment_time)
@@ -115,8 +113,7 @@ class DoctorAvailabilityController extends Controller
             return response()->json(['error' => 'Doctor ID is required'], 400);
         }
 
-        // Get available days for the doctor (e.g., ['Monday', 'Wednesday'])
-        $availableDays = DoctorAvailability::where('doctor_id', $doctorId)
+        $availableDays = DoctorAvailability::where('user_id', $doctorId)
             ->pluck('day_of_week')
             ->toArray();
 
@@ -127,10 +124,9 @@ class DoctorAvailabilityController extends Controller
     {
         $doctorId = $request->doctor_id;
         $selectedDate = Carbon::parse($request->appointment_date);
-        $dayOfWeek = $selectedDate->format('l'); // e.g., 'Monday'
+        $dayOfWeek = $selectedDate->format('l');
 
-        // Fetch available times for this doctor on the selected day
-        $availabilities = DoctorAvailability::where('doctor_id', $doctorId)
+        $availabilities = DoctorAvailability::where('user_id', $doctorId)
             ->where('day_of_week', $dayOfWeek)
             ->get();
 
@@ -141,8 +137,8 @@ class DoctorAvailabilityController extends Controller
             $endTime = Carbon::parse($availability->end_time);
 
             while ($startTime < $endTime) {
-                $timeSlots[] = $startTime->format('H:i'); // Store time in 'HH:MM' format
-                $startTime->addMinutes(30); // Adjust interval as needed
+                $timeSlots[] = $startTime->format('H:i');
+                $startTime->addMinutes(30);
             }
         }
 

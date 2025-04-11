@@ -10,14 +10,13 @@ class DoctorSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('doctors')->insert([
+        DB::table('users')->insert([
             [
                 'name' => 'Dr. John Doe',
                 'email' => 'johndoe@example.com',
                 'password' => Hash::make('password123'),
                 'clinic_address' => '123 Main St, New York, NY',
                 'phone_number' => '1234567890',
-                'deposit_required' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -27,7 +26,15 @@ class DoctorSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'clinic_address' => '456 Elm St, Chicago, IL',
                 'phone_number' => '0987654321',
-                'deposit_required' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Dr. Charlie Chaplin',
+                'email' => 'charliechap@example.com',
+                'password' => Hash::make('password123'),
+                'clinic_address' => '789 Maple Ave, Chicago, IL',  // New address
+                'phone_number' => '1234567890',  // New phone number
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

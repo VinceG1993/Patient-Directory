@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Appointment;
-use App\Models\Doctor;
+use App\Models\User;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Log;
 
@@ -18,14 +18,14 @@ class AppointmentController extends Controller
     
     public function showForm()
     {
-        $doctors = Doctor::all();
+        $doctors = User::all();
         $patients = Patient::all();
         return view('appointments.create', compact('doctors', 'patients'));
     }
 
     public function showByDoctor($id)
     {
-        $doctor = Doctor::findOrFail($id);
+        $doctor = User::findOrFail($id);
         $appointments = $doctor->appointments()->with('patient')->get(); // Load patient info
 
         return view('doctors.appointments', compact('doctor', 'appointments'));
@@ -34,7 +34,7 @@ class AppointmentController extends Controller
     public function submitForm(Request $request)
     {
         $request->validate([
-            'doctor_id' => 'required|exists:doctors,id',
+            'doctor_id' => 'required|exists:users,id',
             'patient_id' => 'required|exists:patients,id',
             'appointment_date' => 'required|date|after:today',
             'appointment_time' => 'required',

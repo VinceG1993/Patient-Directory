@@ -10,11 +10,7 @@ class Patient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'phone_number', 'home_address', 'password'
-    ];
-
-    protected $hidden = [
-        'password'
+        'name', 'email', 'phone_number', 'home_address', 'doctor_id'
     ];
 
     public function medicalRecords()
@@ -25,5 +21,10 @@ class Patient extends Model
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
     }
 }

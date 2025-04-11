@@ -10,7 +10,7 @@ class DoctorAvailabilitySeeder extends Seeder
 {
     public function run()
     {
-        $doctors = DB::table('doctors')->pluck('id');
+        $doctors = DB::table('users')->pluck('id');
 
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
