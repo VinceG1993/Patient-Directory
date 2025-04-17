@@ -27,8 +27,8 @@ class MedicalRecordFieldController extends Controller
         $request->validate([
             'field_name' => 'required|string|max:255',
             'field_type' => 'required|in:text,number,date,boolean',
-            'is_active' => 'boolean',
-            'is_required' => 'boolean',
+            'is_active' => 'nullable|boolean',
+            'is_required' => 'nullable|boolean',
             'default_value' => 'nullable|string|max:255',
         ]);
 

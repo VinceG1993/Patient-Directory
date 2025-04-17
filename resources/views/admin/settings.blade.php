@@ -3,6 +3,16 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4">Settings – Medical Record Fields</h2>
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     {{-- Add New Field Form --}}
     <div class="card mb-4">
@@ -28,17 +38,25 @@
             
                 <div class="mb-3">
                     <label for="default_value" class="form-label">Default Value</label>
-                    <input type="text" name="default_value" id="default_value" class="form-control">
+                
+                    {{-- Text Input (for text, number, date) --}}
+                    <input type="text" name="default_value" id="default_value_text" class="form-control">
+                
+                    {{-- Select Input (for boolean) - hidden by default --}}
+                    <select name="default_value" id="default_value_select" class="form-select d-none mt-2">
+                        <option value="1">True</option>
+                        <option value="0">False</option>
+                    </select>
                 </div>
             
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" name="is_required" id="is_required">
+                    <input class="form-check-input" type="checkbox" name="is_required" id="is_required" value="0">
                     <label class="form-check-label" for="is_required">Required</label>
                 </div>
             
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active">
-                    <label class="form-check-label" for="is_active">Active</label>
+                    <input class="form-check-input" type="checkbox" name="is_active" id="is_active" value="1" checked>
+                    <label class="form-check-label" for="is_active" >Active</label>
                 </div>
             
                 <button type="submit" class="btn btn-success">Add Field</button>
@@ -68,7 +86,13 @@
                         <td>{{ $field->field_type }}</td>
                         <td>{{ $field->is_required ? 'Yes' : 'No' }}</td>
                         <td>{{ $field->is_active ? 'Yes' : 'No' }}</td>
-                        <td>{{ $field->default_value }}</td>
+                        <td>
+                            @if ($field->field_type === 'boolean')
+                                {{ $field->default_value === '1' ? 'True' : 'False' }}
+                            @else
+                                {{ $field->default_value }}
+                            @endif
+                        </td>
                         <td>
                             <form action="{{ route('medical_record_fields.destroy', $field->id) }}" method="POST" onsubmit="return confirm('Delete this field?')" class="d-inline">
                                 @csrf
@@ -86,4 +110,30 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fieldType = document.getElementById('field_type');
+            const textInput = document.getElementById('default_value_text');
+            const selectInput = document.getElementById('default_value_select');
+        
+            function toggleDefaultInput() {
+                if (fieldType.value === 'boolean') {
+                    textInput.classList.add('d-none');
+                    selectInput.classList.remove('d-none');
+                } else {
+                    textInput.classList.remove('d-none');
+                    selectInput.classList.add('d-none');
+                }
+            }
+        
+            // Initial check
+            toggleDefaultInput();
+        
+            // Update on change
+            fieldType.addEventListener('change', toggleDefaultInput);
+        });
+    </script>
 @endsection
