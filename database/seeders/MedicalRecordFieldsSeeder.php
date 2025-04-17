@@ -16,6 +16,7 @@ class MedicalRecordFieldsSeeder extends Seeder
                 'is_active' => true,
                 'is_required' => true,
                 'default_value' => null,
+                'doctor_id' => 1,
             ],
             [
                 'field_name' => 'Heart Rate',
@@ -23,6 +24,7 @@ class MedicalRecordFieldsSeeder extends Seeder
                 'is_active' => true,
                 'is_required' => true,
                 'default_value' => '0',
+                'doctor_id' => 1,
             ],
             [
                 'field_name' => 'Date of Visit',
@@ -30,6 +32,7 @@ class MedicalRecordFieldsSeeder extends Seeder
                 'is_active' => true,
                 'is_required' => true,
                 'default_value' => null,
+                'doctor_id' => 1,
             ],
             [
                 'field_name' => 'Diabetic',
@@ -37,6 +40,7 @@ class MedicalRecordFieldsSeeder extends Seeder
                 'is_active' => true,
                 'is_required' => false,
                 'default_value' => '0',
+                'doctor_id' => 1,
             ],
             [
                 'field_name' => 'Allergies',
@@ -44,6 +48,7 @@ class MedicalRecordFieldsSeeder extends Seeder
                 'is_active' => true,
                 'is_required' => false,
                 'default_value' => null,
+                'doctor_id' => 1,
             ],
         ]);
     }

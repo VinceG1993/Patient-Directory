@@ -8,6 +8,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicalRecordController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MedicalRecordFieldController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -43,10 +44,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/doctor/check-availability', [DoctorAvailabilityController::class, 'checkAvailability'])->name('dac.checkAvailability');
     Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
     Route::get('/appointments/create', [AppointmentController::class, 'showForm'])->name('appointments.create');
-    Route::post('/appointments/store', [AppointmentController::class, 'store'])->name('appointments.store');
-
+    
     // Medical records
-    Route::resource('records', MedicalRecordController::class);
     Route::post('/patients/{id}/records/store', [MedicalRecordController::class, 'store'])->name('records.store');
     Route::get('/patients/{id}/records', [MedicalRecordController::class, 'show'])->name('records.show');
+
+    // Settings
+    Route::resource('medical_record_fields', MedicalRecordFieldController::class);
+    Route::get('/admin/settings', [MedicalRecordFieldController::class, 'index'])->name('admin.settings');
+
 });

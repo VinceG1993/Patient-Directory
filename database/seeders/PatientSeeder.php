@@ -16,7 +16,7 @@ class PatientSeeder extends Seeder
                 'email' => 'alice@example.com',
                 'phone_number' => '1234567890',
                 'home_address' => '789 Oak St, Miami, FL',
-                'doctor_id' => 1, // Assuming the user with ID 1 is the assigned doctor
+                'doctor_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -25,7 +25,7 @@ class PatientSeeder extends Seeder
                 'email' => 'bob@example.com',
                 'phone_number' => '0987654321',
                 'home_address' => '321 Pine St, Dallas, TX',
-                'doctor_id' => 2, // Assuming the user with ID 2 is the assigned doctor
+                'doctor_id' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
@@ -34,7 +34,7 @@ class PatientSeeder extends Seeder
                 'email' => 'charlie@example.com',
                 'phone_number' => '1112223333',
                 'home_address' => '456 Cedar Ave, Seattle, WA',
-                'doctor_id' => 3, // Assuming the user with ID 3 is the assigned doctor
+                'doctor_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

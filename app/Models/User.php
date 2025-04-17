@@ -33,4 +33,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Patient::class);
     }
+
+    public function medicalrecordfields()
+    {
+        return $this->hasMany(MedicalRecordField::class);
+    }
 }

@@ -55,6 +55,8 @@ return new class extends Migration {
             $table->boolean('is_active')->default(true);
             $table->boolean('is_required')->default(false);
             $table->string('default_value', 255)->nullable();
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
         });
 
         // Appointments Table

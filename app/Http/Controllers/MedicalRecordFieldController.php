@@ -9,8 +9,12 @@ class MedicalRecordFieldController extends Controller
 {
     public function index()
     {
-        $fields = MedicalRecordField::all();
-        return view('medical_record_fields.index', compact('fields'));
+        // Get the ID of the logged-in doctor (user)
+        $doctorId = auth()->user()->id;
+
+        // Fetch only the patients assigned to this doctor
+        $fields = MedicalRecordField::where('doctor_id', $doctorId)->latest()->paginate(10);
+        return view('admin.settings', compact('fields'));
     }
 
     public function create()
@@ -28,7 +32,14 @@ class MedicalRecordFieldController extends Controller
             'default_value' => 'nullable|string|max:255',
         ]);
 
-        MedicalRecordField::create($request->all());
+        MedicalRecordField::create([
+            'field_name' => $request->field_name,
+            'field_type' => $request->field_type,
+            'is_active' => $request->has('is_active'), // true/false
+            'is_required' => $request->has('is_required'), // true/false
+            'default_value' => $request->default_value,
+            'doctor_id' => auth()->id(), 
+        ]);
 
         return redirect()->route('medical_record_fields.index')->with('success', 'Field created successfully.');
     }

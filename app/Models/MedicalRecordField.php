@@ -17,7 +17,11 @@ class MedicalRecordField extends Model
         'is_active',
         'is_required',
         'default_value',
+        'doctor_id'
     ];
 
-    public $timestamps = false; 
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    } 
 }

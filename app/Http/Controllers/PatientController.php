@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Patient;
-use App\Models\MedicalRecordField;
 
 class PatientController extends Controller
 {
-    /**
-     * Display a listing of the patients.
-     */
     public function index()
     {
         // Get the ID of the logged-in doctor (user)

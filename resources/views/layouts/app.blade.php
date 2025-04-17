@@ -23,6 +23,23 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
+                    
+                    <!-- Main nav links -->
+                    <ul class="navbar-nav me-lg-auto text-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
+                        </li>
+                        <!--<li class="nav-item">
+                            <a class="nav-link" href="{{ route('appointments.index') }}">Appointments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('doctors.index') }}">Doctors</a>
+                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('patients.index') }}">Patients</a>
+                        </li>
+                    </ul>
+
                     <!-- User dropdown when logged in -->
                     <ul class="navbar-nav d-none d-lg-flex">
                         @auth
@@ -48,23 +65,6 @@
                                 </a>
                             </li>
                         @endauth
-                    </ul>
-
-
-                    <!-- Main nav links -->
-                    <ul class="navbar-nav ms-lg-auto text-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
-                        </li>
-                        <!--<li class="nav-item">
-                            <a class="nav-link" href="{{ route('appointments.index') }}">Appointments</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('doctors.index') }}">Doctors</a>
-                        </li>-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('patients.index') }}">Patients</a>
-                        </li>
                     </ul>
 
                     <!-- Mobile view login/logout -->

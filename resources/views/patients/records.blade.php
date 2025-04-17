@@ -120,11 +120,30 @@
         hidden.name = "record_data[]";
         hidden.value = field.field_name;
 
-        let input = document.createElement("input");
-        input.type = field.field_type;
-        input.name = "record_data[]";
-        input.className = "form-control mt-2";
-        input.placeholder = field.default_value;
+        let input;
+
+        if (field.field_type === "boolean") {
+            input = document.createElement("select");
+            input.name = "record_data[]";
+            input.className = "form-select mt-2";
+
+            let optionYes = document.createElement("option");
+            optionYes.value = "Yes";
+            optionYes.text = "Yes";
+
+            let optionNo = document.createElement("option");
+            optionNo.value = "No";
+            optionNo.text = "No";
+
+            input.appendChild(optionYes);
+            input.appendChild(optionNo);
+        } else {
+            input = document.createElement("input");
+            input.type = field.field_type;
+            input.name = "record_data[]";
+            input.className = "form-control mt-2";
+            input.placeholder = field.default_value;
+        }
 
         let removeBtn = document.createElement("button");
         removeBtn.type = "button";

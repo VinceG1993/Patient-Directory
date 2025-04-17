@@ -13,7 +13,7 @@ class MedicalRecordController extends Controller
     {
         $patient = Patient::findOrFail($id);
         $records = $patient->medicalRecords;
-        $fields = MedicalRecordField::all();
+        $fields = MedicalRecordField::where('doctor_id', auth()->id())->get();
 
         $allNames = collect();
         $allData = [];
@@ -24,8 +24,8 @@ class MedicalRecordController extends Controller
             if (is_array($decodedData)) {
                 $row = [];
                 for ($i = 0; $i < count($decodedData); $i += 2) {
-                    $fieldName = $decodedData[$i]; // Even index = Field Name
-                    $fieldValue = $decodedData[$i + 1] ?? ''; // Odd index = Value
+                    $fieldName = $decodedData[$i];
+                    $fieldValue = $decodedData[$i + 1] ?? '';
 
                     $row[$fieldName] = $fieldValue; 
                     $allNames->push($fieldName);
