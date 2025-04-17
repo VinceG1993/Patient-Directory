@@ -39,15 +39,22 @@
                 <div class="mb-3">
                     <label for="default_value" class="form-label">Default Value</label>
                 
-                    {{-- Text Input (for text, number, date) --}}
-                    <input type="text" name="default_value" id="default_value_text" class="form-control">
+                    {{-- Text Input --}}
+                    <input type="text" name="default_value" id="default_value_text" class="form-control" disabled placeholder="Select Field Type">
                 
-                    {{-- Select Input (for boolean) - hidden by default --}}
-                    <select name="default_value" id="default_value_select" class="form-select d-none mt-2">
+                    {{-- Number Input --}}
+                    <input type="number" name="default_value" id="default_value_number" class="form-control d-none" disabled placeholder="Select Field Type">
+                
+                    {{-- Date Input --}}
+                    <input type="date" name="default_value" id="default_value_date" class="form-control d-none" disabled placeholder="Select Field Type">
+                
+                    {{-- Boolean Select --}}
+                    <select name="default_value" id="default_value_boolean" class="form-select d-none" disabled>
+                        <option value="" disabled selected>Select True/False</option>
                         <option value="1">True</option>
                         <option value="0">False</option>
                     </select>
-                </div>
+                </div>    
             
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="checkbox" name="is_required" id="is_required" value="0">
@@ -116,24 +123,58 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const fieldType = document.getElementById('field_type');
-            const textInput = document.getElementById('default_value_text');
-            const selectInput = document.getElementById('default_value_select');
         
-            function toggleDefaultInput() {
-                if (fieldType.value === 'boolean') {
-                    textInput.classList.add('d-none');
-                    selectInput.classList.remove('d-none');
-                } else {
-                    textInput.classList.remove('d-none');
-                    selectInput.classList.add('d-none');
+            const inputText = document.getElementById('default_value_text');
+            const inputNumber = document.getElementById('default_value_number');
+            const inputDate = document.getElementById('default_value_date');
+            const inputBoolean = document.getElementById('default_value_boolean');
+        
+            function updateDefaultInput() {
+                // Hide and disable all inputs, and clear any previous values
+                [inputText, inputNumber, inputDate, inputBoolean].forEach(input => {
+                    input.classList.add('d-none');
+                    input.disabled = true;
+                    input.value = '';  // Clear any previous value
+                    // Set placeholder to default when the field is disabled
+                    if (input.tagName === 'INPUT') {
+                        input.setAttribute('placeholder', 'Select Field Type');
+                    }
+                });
+        
+                // If no field type is selected, display the blank disabled input
+                if (fieldType.value === '') {
+                    inputText.classList.remove('d-none');
+                    inputText.disabled = true;
+                    inputText.setAttribute('placeholder', 'Select Field Type');
+                    return;
+                }
+        
+                // Show and enable the appropriate input based on field type
+                switch (fieldType.value) {
+                    case 'text':
+                        inputText.classList.remove('d-none');
+                        inputText.disabled = false;
+                        inputText.removeAttribute('placeholder');
+                        break;
+                    case 'number':
+                        inputNumber.classList.remove('d-none');
+                        inputNumber.disabled = false;
+                        inputNumber.removeAttribute('placeholder');
+                        break;
+                    case 'date':
+                        inputDate.classList.remove('d-none');
+                        inputDate.disabled = false;
+                        inputDate.removeAttribute('placeholder');
+                        break;
+                    case 'boolean':
+                        inputBoolean.classList.remove('d-none');
+                        inputBoolean.disabled = false;
+                        break;
                 }
             }
         
-            // Initial check
-            toggleDefaultInput();
-        
-            // Update on change
-            fieldType.addEventListener('change', toggleDefaultInput);
+            updateDefaultInput();
+            fieldType.addEventListener('change', updateDefaultInput);
         });
-    </script>
+    </script>    
 @endsection
