@@ -51,5 +51,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Settings
     Route::resource('medical_record_fields', MedicalRecordFieldController::class);
+    Route::get('/settings', [MedicalRecordFieldController::class, 'index'])->name('admin.settings')
 
 });
