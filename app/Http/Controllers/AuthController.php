@@ -24,13 +24,19 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        // Check if the user exists and if the password matches
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            // Authenticate the user
+            Auth::login($user);
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
 
         return back()->with('error', 'Invalid email or password.');
     }
+
 
     // Show register form
     public function showRegister()
