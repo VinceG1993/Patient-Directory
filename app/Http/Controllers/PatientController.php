@@ -10,22 +10,29 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         $doctorId = auth()->user()->id;
-    
+
         $query = Patient::where('doctor_id', $doctorId);
-    
+
         if ($request->has('search') && $request->search !== '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone_number', 'like', "%{$search}%");
+                $q->where('fname', 'like', "%{$search}%")
+                ->orWhere('mname', 'like', "%{$search}%")
+                ->orWhere('lname', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phone_number', 'like', "%{$search}%");
             });
         }
-    
+
         $patients = $query->latest()->paginate(10);
-    
+
+        if ($request->ajax()) {
+            return view('patients._table', compact('patients'))->render();
+        }
+
         return view('patients.index', compact('patients'));
     }
+
     
 
     /**
@@ -42,14 +49,18 @@ class PatientController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:42',
+            'fname' => 'required|string|max:42',
+            'mname' => 'nullable|string|max:42',
+            'lname' => 'required|string|max:42',
             'email' => 'required|email|max:42|unique:patients,email',
             'phone_number' => 'required|string|max:15',
             'home_address' => 'required|string|max:255',
         ]);
 
         Patient::create([
-            'name' => $request->name,
+            'fname' => $request->fname,
+            'mname' => $request->mname,
+            'lname' => $request->lname,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'home_address' => $request->home_address,
@@ -75,7 +86,9 @@ class PatientController extends Controller
     public function update(Request $request, Patient $patient)
     {
         $request->validate([
-            'name' => 'required|string|max:42',
+            'fname' => 'required|string|max:42',
+            'mname' => 'nullable|string|max:42',
+            'lname' => 'required|string|max:42',
             'email' => 'required|email|max:42|unique:patients,email,' . $patient->id,
             'phone_number' => 'required|string|max:15',
             'home_address' => 'required|string|max:255',

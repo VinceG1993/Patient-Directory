@@ -30,7 +30,9 @@ return new class extends Migration {
         // Patients Table
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 42);
+            $table->string('fname', 42);
+            $table->string('mname', 42)->nullable();
+            $table->string('lname', 42);
             $table->string('email', 42);
             $table->string('phone_number', 15);
             $table->string('home_address', 255);

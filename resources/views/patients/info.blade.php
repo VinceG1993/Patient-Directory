@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="text-center">{{ $patient->name }}
+    <h2 class="text-center">{{ $patient->fname }} {{ $patient->mname }} {{ $patient->lname }}
         <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="d-inline">
             @csrf
             @method('DELETE')
@@ -13,7 +13,7 @@
     <div class="row mt-5">
         <div class="col-md-6">
             <div class="card mb-3">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h2>Information</h2>
                     <div class="form-check form-switch mb-1">
                         <input class="form-check-input" type="checkbox" role="switch" id="toggleForm">
@@ -25,21 +25,60 @@
                         @csrf
                         @method('PUT')
 
+                        <!-- First Name -->
                         <div class="mb-3">
-                            <label>Name</label>
-                            <input type="text" name="name" class="form-control" value="{{ $patient->name }}" required disabled>
+                            <label>First Name</label>
+                            <input type="text" name="fname" class="form-control @error('fname') is-invalid @enderror" value="{{ $patient->fname }}" required disabled>
+                            @error('fname')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+
+                        <!-- Middle Name -->
+                        <div class="mb-3">
+                            <label>Middle Name</label>
+                            <input type="text" name="mname" class="form-control @error('mname') is-invalid @enderror" value="{{ $patient->mname }}" disabled>
+                            @error('mname')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="mb-3">
+                            <label>Last Name</label>
+                            <input type="text" name="lname" class="form-control @error('lname') is-invalid @enderror" value="{{ $patient->lname }}" required disabled>
+                            @error('lname')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Email -->
                         <div class="mb-3">
                             <label>Email</label>
-                            <input type="email" name="email" class="form-control" value="{{ $patient->email }}" required disabled>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ $patient->email }}" required disabled>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+
+                        <!-- Phone -->
                         <div class="mb-3">
                             <label>Phone</label>
-                            <input type="text" name="phone_number" class="form-control" value="{{ $patient->phone_number }}" required disabled>
+                            <input type="text" name="phone_number"
+                                class="form-control @error('phone_number') is-invalid @enderror" value="{{ $patient->phone_number }}" required disabled>
+                            @error('phone_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+
+                        <!-- Address -->
                         <div class="mb-3">
                             <label>Address</label>
-                            <input type="text" name="home_address" class="form-control" value="{{ $patient->home_address }}" required disabled>
+                            <input type="text" name="home_address"
+                                class="form-control @error('home_address') is-invalid @enderror" value="{{ $patient->home_address }}" required disabled>
+                            @error('home_address')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <button id="saveInfo" type="submit" class="btn btn-success d-none">Save Changes</button>

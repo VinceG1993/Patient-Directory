@@ -12,7 +12,9 @@ class PatientSeeder extends Seeder
     {
         DB::table('patients')->insert([
             [
-                'name' => 'Alice Johnson',
+                'fname' => 'Alice',
+                'mname' => 'Sophia',
+                'lname' => 'Johnson',
                 'email' => 'alice@example.com',
                 'phone_number' => '1234567890',
                 'home_address' => '789 Oak St, Miami, FL',
@@ -21,7 +23,9 @@ class PatientSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'Bob Smith',
+                'fname' => 'Bob',
+                'mname' => 'Marley',
+                'lname' => 'Smith',
                 'email' => 'bob@example.com',
                 'phone_number' => '0987654321',
                 'home_address' => '321 Pine St, Dallas, TX',
@@ -30,7 +34,9 @@ class PatientSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'Charlie Brown',
+                'fname' => 'Charlie',
+                'mname' => 'Felix',
+                'lname' => 'Brown',
                 'email' => 'charlie@example.com',
                 'phone_number' => '1112223333',
                 'home_address' => '456 Cedar Ave, Seattle, WA',

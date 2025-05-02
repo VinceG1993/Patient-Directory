@@ -10,7 +10,7 @@ class Patient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'phone_number', 'home_address', 'doctor_id'
+        'fname', 'mname', 'lname', 'email', 'phone_number', 'home_address', 'doctor_id'
     ];
 
     public function medicalRecords()
