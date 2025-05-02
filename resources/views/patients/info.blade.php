@@ -37,7 +37,7 @@
                         <!-- Middle Name -->
                         <div class="mb-3">
                             <label>Middle Name</label>
-                            <input type="text" name="mname" class="form-control @error('mname') is-invalid @enderror" value="{{ $patient->mname }}" disabled>
+                            <input type="text" name="mname" class="form-control @error('mname') is-invalid @enderror" value="{{ $patient->mname }}" placeholder="-" disabled>
                             @error('mname')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
