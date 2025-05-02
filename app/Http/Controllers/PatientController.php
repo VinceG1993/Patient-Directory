@@ -7,16 +7,26 @@ use App\Models\Patient;
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Get the ID of the logged-in doctor (user)
         $doctorId = auth()->user()->id;
-
-        // Fetch only the patients assigned to this doctor
-        $patients = Patient::where('doctor_id', $doctorId)->latest()->paginate(10);
-
+    
+        $query = Patient::where('doctor_id', $doctorId);
+    
+        if ($request->has('search') && $request->search !== '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone_number', 'like', "%{$search}%");
+            });
+        }
+    
+        $patients = $query->latest()->paginate(10);
+    
         return view('patients.index', compact('patients'));
     }
+    
 
     /**
      * Show the form for creating a new patient.

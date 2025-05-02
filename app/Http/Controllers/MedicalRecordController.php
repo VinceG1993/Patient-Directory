@@ -36,7 +36,7 @@ class MedicalRecordController extends Controller
 
         $uniqueFields = $allNames->unique();
 
-        return view('patients.records', compact('patient', 'records', 'fields', 'allData', 'uniqueFields'));
+        return view('patients.info', compact('patient', 'records', 'fields', 'allData', 'uniqueFields'));
     }
 
     public function store(Request $request,$id)

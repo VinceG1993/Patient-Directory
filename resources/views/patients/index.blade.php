@@ -3,35 +3,33 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="text-center">Patients List</h2>
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addPatientModal"><i class="bi bi-plus-lg"></i> Add New Patient</button>
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addPatientModal"><i class="bi bi-plus-lg"></i> Add New Patient</button>
+        </div>
+        <div class="col-md-6">
+            <form method="GET" action="{{ route('patients.index') }}" class="mb-3 d-flex">
+                <input type="text" name="search" class="form-control me-2" placeholder="Search patients..." value="{{ request('search') }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
     <table class="table table-bordered">
         <thead class="table-dark">
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($patients as $patient)
                 <tr>
-                    <td>{{ $patient->id }}</td>
-                    <td>{{ $patient->name }}</td>
+                    <td><a href="{{ route('records.show', $patient->id) }}">{{ $patient->name }}</a></td>
                     <td>{{ $patient->email }}</td>
                     <td>{{ $patient->phone_number }}</td>
                     <td>{{ $patient->home_address }}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editPatientModal{{ $patient->id }}">Edit</button>
-                        <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                        </form>
-                        <a href="{{ route('records.show', $patient->id) }}" class="btn btn-sm btn-primary">View Records</a>
-                    </td>
                 </tr>
 
                 <!-- Edit Modal -->

@@ -2,36 +2,91 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="text-center">{{ $patient->name }}'s Medical Records</h2>
-    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addRecordModal">
-        <i class="bi bi-plus-lg"></i> Add New Record
-    </button>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Notes</th>
-                @foreach ($uniqueFields as $fieldName)
-                    <th>{{ $fieldName }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($records as $index => $record)
-                <tr>
-                    <td>{{ $record->id }}</td>
-                    <td>{{ $record->record_date }}</td>
-                    <td>{{ $record->notes }}</td>
+    <h2 class="text-center">{{ $patient->name }}
+        <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+        </form>
+    </h2>
     
-                    @foreach ($uniqueFields as $fieldName)
-                        <td>{{ $allData[$index][$fieldName] ?? '-' }}</td> 
-                    @endforeach
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2>Information</h2>
+                    <div class="form-check form-switch mb-1">
+                        <input class="form-check-input" type="checkbox" role="switch" id="toggleForm">
+                        <label class="form-check-label" for="toggleForm">Edit</label>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="info" action="{{ route('patients.update', $patient->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="mb-3">
+                            <label>Name</label>
+                            <input type="text" name="name" class="form-control" value="{{ $patient->name }}" required disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ $patient->email }}" required disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label>Phone</label>
+                            <input type="text" name="phone_number" class="form-control" value="{{ $patient->phone_number }}" required disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label>Address</label>
+                            <input type="text" name="home_address" class="form-control" value="{{ $patient->home_address }}" required disabled>
+                        </div>
+
+                        <button id="saveInfo" type="submit" class="btn btn-success d-none">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2>Records</h2>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addRecordModal">
+                        <i class="bi bi-plus-lg"></i> Add New Record
+                    </button>
+                
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Notes</th>
+                                @foreach ($uniqueFields as $fieldName)
+                                    <th>{{ $fieldName }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($records as $index => $record)
+                                <tr>
+                                    <td>{{ $record->id }}</td>
+                                    <td>{{ $record->record_date }}</td>
+                                    <td>{{ $record->notes }}</td>
+                    
+                                    @foreach ($uniqueFields as $fieldName)
+                                        <td>{{ $allData[$index][$fieldName] ?? '-' }}</td> 
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 <!-- Add Record Modal -->
@@ -175,6 +230,16 @@
     document.getElementById("addRecordModal").addEventListener("hidden.bs.modal", function () {
         document.getElementById("fieldsContainer").innerHTML = ""; // Clear added fields
         addedFields.clear(); // Clear tracking set
+    });
+
+    const toggle = document.getElementById('toggleForm');
+    const form = document.getElementById('info');
+    const button =document.getElementById('saveInfo');
+
+    toggle.addEventListener('change', () => {
+        const isEnabled = toggle.checked;
+        Array.from(form.elements).forEach(el => el.disabled = !isEnabled);
+        button.classList.toggle('d-none', !toggle.checked);
     });
 
 </script>
